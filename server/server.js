@@ -1,11 +1,11 @@
 import express from "express";
-import mongoose from "mongoose";
+import dbConnect from './databaseConnections/index.js'
+import config from './config/index.js';
+const { PORT } = config;
 const app = express()
-const PORT = 8080;
 
- mongoose.connect("mongodb+srv://jjawadamn883:jjawadamn883@cluster0.uif7o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+dbConnect()
 
- .then (()=>(console.log("DB connected succesfully ")))
- .catch(()=>(console.log("Not connected som error from DB")))
+ app.get('/',(req ,res)=>{res.json({msg : "Server are running "})})
 
  app.listen(PORT, ()=>(console.log("Server connected succesfully at ", PORT)))
