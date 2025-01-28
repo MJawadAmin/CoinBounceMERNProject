@@ -1,0 +1,28 @@
+import pkg from 'joi';
+const { ValidationError } = pkg;
+
+let errorHandler = (err, req, res, next) => {
+    let status = 500;
+    let error = {
+        message: 'external error',  // Corrected spelling
+        status
+    };
+
+    if (err instanceof ValidationError) {
+        status = 400;
+        error.message = err.message;  // Correctly update the error message
+        return res.status(status).json(error);
+    }
+
+    if (err.status) {
+        status = err.status;
+    }
+
+    if (err.message) {
+        error.message = err.message;  // Correctly set the error message from the err object
+    }
+
+    return res.status(status).json(error);  // Use the 'error' object here
+};
+
+export default errorHandler;
