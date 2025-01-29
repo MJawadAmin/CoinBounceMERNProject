@@ -1,9 +1,14 @@
+import config from '../config/index.js';
+
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = config;
+
 import jwt from 'jsonwebtoken' 
 import refreshtokenModel from '../models/token.js'
-import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from '../config/index'
 
 
-class jwtservices{
+
+
+class JWTservices{
     //sign access token
    static signAccessToken(payload, expiryTime ){
         return jwt.sign(payload, ACCESS_TOKEN_SECRET , {expiresIn: expiryTime});
@@ -26,7 +31,7 @@ class jwtservices{
     }
 
     //store refresh token 
-    async storeRefreshToken(token , userId ){
+    static async storeRefreshToken(token , userId ){
         try {
             const newToken= new refreshtokenModel({
                 token : token ,
@@ -41,4 +46,4 @@ class jwtservices{
         }
     }
 }
-export default jwtservices;
+export default JWTservices;
