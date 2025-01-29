@@ -1,6 +1,8 @@
 import Joi from "joi";
 import userModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs'
+import userDTO from "../dto/user.js";
+import UserDTO from "../dto/user.js";
 const passwordPattern = /^[a-zA-Z0-9]{8,30}$/;
 
 
@@ -60,7 +62,8 @@ const authController = {
         });
         const user = await userRegisterData.save();
         // 6. response send 
-        return res.status(201).json({user})
+        const userDto = new UserDTO(user)
+        return res.status(201).json({user: userDTO})
 
 
 
@@ -102,8 +105,9 @@ const authController = {
         } catch (error) {
             return next(error);
         }
+        const userDTO = new UserDTO(user)
     
-        return res.status(200).json({ user: user });
+        return res.status(200).json({ user: userDTO });
     }
   
     
