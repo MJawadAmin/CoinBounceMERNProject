@@ -3,6 +3,7 @@ import userModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs'
 import UserDTO from "../dto/user.js";
 import JWTservices from "../services/jwtservices.js";
+import RefreshToken from '../models/token.js'
 const passwordPattern = /^[a-zA-Z0-9]{8,30}$/;
 
 
@@ -73,8 +74,8 @@ const authController = {
             return next(error)
             
         }
-        //store in db
-     JWTservices.storeRefreshToken(refreshToken,user._id)
+        //store refresh token in db
+     await JWTservices.storeRefreshToken(refreshToken,user._id)
         //send token cookies
         res.cookie('accessToken', (accessToken),{
             maxAge: 1000*60*60*24,
@@ -127,7 +128,34 @@ const authController = {
             }
         } catch (error) {
             return next(error);
+        
         }
+        
+        const accessToken= JWTservices.signAccessToken({_id: user._id},'30m')
+        const refreshToken = JWTservices.signRefreshToken({_id:user._id}, '60m')
+        //update refresh token in database 
+        try {
+            await RefreshToken.updateOne({
+                _id: user.__id
+            },
+            {token : refreshToken},
+            {upsert: true}
+        )
+            
+        } catch (error) {
+            return next(error)
+            
+        }
+      
+        res.cookie('accessToken', accessToken,{
+            maxAge:1000* 60 * 60 *24,
+            httpOnly:true
+        })
+        res.cookie('refreshToken', refreshToken,{
+            maxAge: 1000* 60 * 60 *24 ,
+            httpOnly: true
+        })
+        
         const userDTO = new UserDTO(user)
     
         return res.status(200).json({ user: userDTO });
