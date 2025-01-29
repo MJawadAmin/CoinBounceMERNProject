@@ -67,7 +67,7 @@ const authController = {
             });
             user = await userRegisterData.save();
             //token Generation
-            accessToken= JWTservices.signAccessToken({_id : user._id, username : user.username },'30m')
+            accessToken= JWTservices.signAccessToken({_id : user._id },'30m')
             refreshToken= JWTservices.signRefreshToken({_id: user._id}, '60m')
             
         } catch (error) {
@@ -87,7 +87,7 @@ const authController = {
         })
         // 6. response send 
         const userDto = new UserDTO(user)
-        return res.status(201).json({user: userDto})
+        return res.status(201).json({user: userDto, auth : true})
 
 
 
@@ -158,7 +158,19 @@ const authController = {
         
         const userDTO = new UserDTO(user)
     
-        return res.status(200).json({ user: userDTO });
+        return res.status(200).json({ user: userDTO, auth : true });
+    },
+     async logout(req , res, next){
+        // delete refresh token from database
+        const {refreshToken}= req.cookie
+        try {
+            RefreshToken.deleteOne({token: refreshToken})
+            
+        } catch (error) {
+            
+        }
+        //response 
+
     }
   
     
