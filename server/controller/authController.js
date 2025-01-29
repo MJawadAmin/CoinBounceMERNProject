@@ -1,10 +1,11 @@
 import Joi from "joi";
 import userModel from "../models/userModel.js";
 import bcrypt from 'bcryptjs'
-// Define password pattern for validation
 const passwordPattern = /^[a-zA-Z0-9]{8,30}$/;
 
+
 const authController = {
+  
     async register(req , res ,next){
         // 1. Validate user input
         const passwordPattern = /^[a-zA-Z0-9]{8,30}$/; // Define passwordPattern (example pattern)
@@ -65,6 +66,46 @@ const authController = {
 
 
     },
-    async login(){}
+    async login(req, res, next) {
+        const loginRegesteration = Joi.object({
+            username: Joi.string().min(5).max(30).required(),
+            password: Joi.string().pattern(passwordPattern).required()
+        });
+    
+        const { error } = loginRegesteration.validate(req.body);
+        if (error) {
+            return next(error);
+        }
+    
+        const { username, password } = req.body;
+        let user;
+        try {
+            // Match user
+            user = await userModel.findOne({ username: username });
+            if (!user) {
+                const error = {
+                    status: 401,
+                    message: 'Invalid user'
+                };
+                return next(error);
+            }
+    
+            // Match password
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                const error = {
+                    status: 401,
+                    message: 'Invalid password'
+                };
+                return next(error);
+            }
+        } catch (error) {
+            return next(error);
+        }
+    
+        return res.status(200).json({ user: user });
+    }
+  
+    
 }
 export default authController;

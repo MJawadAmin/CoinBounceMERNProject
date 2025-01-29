@@ -1,20 +1,21 @@
 import pkg from 'joi'
 const { ValidationError} =pkg
-let errorHandler = (err , req , res , next )=>{
+let errorHandler = (error , req , res , next )=>{
     let status = 500 ;
+    console.log(error)
     let data ={
         messaege : 'external error', status
     }
-    if (err instanceof  ValidationError){
+    if (error instanceof  ValidationError){
         let status = 400 ;
-        data.messaege= err.message;
+        data.messaege= error.message;
           return res.status(status).json(data)
     }
-    if (err.status){
-        status = err.status
+    if (error.status){
+        status = error.status
     }
-    if (err.messaege){
-        data.messaege= err.messaege
+    if (error.messaege){
+        data.messaege= error.messaege
     }
     return res.status(status).json(data)
 }
