@@ -42,7 +42,7 @@ class JWTservices{
 
             
         } catch (error) {
-            
+            return next(error)
         }
     }
 }

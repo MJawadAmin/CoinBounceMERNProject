@@ -65,7 +65,7 @@ const authController = {
                 email,
                 password: hashedPassword
             });
-            user = await userRegisterData.save();
+           const user = await userRegisterData.save();
             //token Generation
             accessToken= JWTservices.signAccessToken({_id : user._id },'30m')
             refreshToken= JWTservices.signRefreshToken({_id: user._id}, '60m')
@@ -136,7 +136,7 @@ const authController = {
         //update refresh token in database 
         try {
             await RefreshToken.updateOne({
-                _id: user.__id
+                _id: user._id
             },
             {token : refreshToken},
             {upsert: true}
@@ -162,14 +162,18 @@ const authController = {
     },
      async logout(req , res, next){
         // delete refresh token from database
-        const {refreshToken}= req.cookie
+        const {refreshToken}= req.cookies
         try {
-            RefreshToken.deleteOne({token: refreshToken})
+           await RefreshToken.deleteOne({token: refreshToken})
             
         } catch (error) {
-            
+            return next(error);
         }
+        //delete cookies
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken')
         //response 
+        res.status(200).json({user: null, auth: false})
 
     }
   
