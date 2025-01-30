@@ -10,11 +10,16 @@ router.post ('/register', authController.register)
 router.post ('/login', authController.login) 
 //logout
 router.post('/logout',auth, authController.logout)
-
-
 //refresh
+router.get('/refresh', authController.refresh)
 
 //blog
+//CRUD
+//create
+//read all blogs
+// read blog by id
+//update 
+// delete 
 
 
 export default router;

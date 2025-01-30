@@ -1,0 +1,48 @@
+     there are all errors which is solved
+
+refresh API errors
+  // async refresh (req, res , next ){
+       
+    //     const originalRefreshToken = req.cookies.refreshToken;
+    //     let id ;
+    //     try {
+    //        id = JWTservices.verifyRefreshToken(originalRefreshToken)._id;
+    //     } catch (err) {
+    //         const error ={
+    //             status: 401,
+    //             message: 'unauthorized'
+    //         }
+    //         return next(error)   
+    //     }
+    //     try {
+    //        const match = RefreshToken.findOne({id : _id, token: originalRefreshToken })
+    //        if(!match){
+    //         const error= {
+    //             status: 401,
+    //             message : 'unauthorized'
+    //         }
+    //         return next(error)
+    //        }
+            
+    //     } catch (error) {
+    //         return next(error)
+            
+    //     }
+    //     try {
+    //         const accessToken= JWTservices.signAccessToken({_id:id}, '30m')
+    //         const refreshToken= JWTservices.signRefreshToken({_id:id}, '60m')
+    //         await RefreshToken.updateOne({id:_id},{token: refreshToken})
+
+    //         res.cookie('accesstoken', accessToken,{
+    //             maxAge: 1000* 60 * 60 *24,
+    //             httpOnly: true
+    //         })
+            
+    //     } catch (error) {
+    //         return next(error)
+            
+    //     }
+    //     const user =await userModel.findOne({_id:id });
+    //     const userDto = new UserDTO(user)
+    //     return res.status(200).json({user: userDto, auth : true})
+    // }

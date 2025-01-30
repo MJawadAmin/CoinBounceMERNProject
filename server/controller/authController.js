@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 import UserDTO from "../dto/user.js";
 import JWTservices from "../services/jwtservices.js";
 import RefreshToken from '../models/token.js'
+import auth from "../middleware/auth.js";
 const passwordPattern = /^[a-zA-Z0-9]{8,30}$/;
 
 
@@ -161,6 +162,7 @@ const authController = {
         return res.status(200).json({ user: userDTO, auth : true });
     },
      async logout(req , res, next){
+      
         // delete refresh token from database
         const {refreshToken}= req.cookies
         try {
@@ -175,7 +177,65 @@ const authController = {
         //response 
         res.status(200).json({user: null, auth: false})
 
+    },
+  
+    async refresh(req, res, next) {
+        const originalRefreshToken = req.cookies.refreshToken;  // Ensure correct cookie name
+        let id;
+    
+        try {
+            id = JWTservices.verifyRefreshToken(originalRefreshToken)._id;
+        } catch (err) {
+            const error = {
+                status: 401,
+                message: 'Unauthorized'
+            };
+            return next(error);
+        }
+    
+        try {
+            // Check for the refresh token in the database
+            const match = await RefreshToken.findOne({ _id: id, token: originalRefreshToken });  // Ensure '_id' is used for MongoDB query
+            if (!match) {
+                const error = {
+                    status: 401,
+                    message: 'Unauthorized'
+                };
+                return next(error);
+            }
+        } catch (error) {
+            return next(error);
+        }
+    
+        try {
+            // Generate new access and refresh tokens
+            const accessToken = JWTservices.signAccessToken({ _id: id }, '30m');
+            const refreshToken = JWTservices.signRefreshToken({ _id: id }, '60m');
+            
+            // Update refresh token in the database
+            await RefreshToken.updateOne({ _id: id }, { token: refreshToken });  // Ensure '_id' is used
+    
+            // Set new tokens in cookies
+            res.cookie('accessToken', accessToken, {
+                maxAge: 1000 * 60 * 60 * 24,
+                httpOnly: true
+            });
+    
+            res.cookie('refreshToken', refreshToken, {
+                maxAge: 1000 * 60 * 60 * 24,
+                httpOnly: true
+            });
+        } catch (error) {
+            return next(error);
+        }
+    
+        // Fetch user data and send the response
+        const user = await userModel.findOne({ _id: id });  // Ensure '_id' is used
+        const userDto = new UserDTO(user);
+    
+        return res.status(200).json({ user: userDto, auth: true });
     }
+    
   
     
 }
