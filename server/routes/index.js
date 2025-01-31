@@ -1,6 +1,7 @@
 import express from "express";
 import authController from "../controller/authController.js";
 import auth from '../middleware/auth.js'
+import blogController from "../controller/blogController.js";
 const router = express.Router()
 //user 
 
@@ -13,7 +14,7 @@ router.post('/logout',auth, authController.logout)
 //refresh
 router.get('/refresh', authController.refresh)
 //blog
-router.post('blog', auth, blogController.create)
+router.post('/blog', auth, blogController.create)
 //CRUD
 ///getall 
 router.get('/blog/all', auth , blogController.getAll);
@@ -25,7 +26,7 @@ router.get('/blog/:id', auth , blogController.getById)
 //update 
 router.put('/blog', auth , blogController.update)
 // delete 
-router.delete('/blog/:id', auth , blogController.delete)
+// router.delete('/blog/:id', auth , blogController.delete)
 
 
 export default router;

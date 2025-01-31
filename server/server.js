@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(router);
 
 dbConnect()
- app.get('/',(req ,res)=>{res.json({msg : "Server are running "})})
+
+app.use('/storage', express.static('storage')); // Serve static files from the 'storage' directory
 
  app.use(errorHandler)
 
