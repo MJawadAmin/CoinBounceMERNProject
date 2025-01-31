@@ -202,7 +202,23 @@ photo: Joi.string(),
 }
 ,
 
-    async delete(req, res , next){}
+    async delete(req, res , next){
+        //Validate
+        //delete blog
+        //delete comments on this blog
+        const delteBlogSchema= Joi.object({
+            id : Joi.string().regex(MongoDbPattern).required()
+        });
+        const {error}=delteBlogSchema.validate(req.params);
+        const id = req.params;
+        //delete blog
+        //delete comments
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
 };
 
 export default blogController;
