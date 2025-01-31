@@ -127,20 +127,26 @@ async getById(req, res, next) {
 //     return res.status(200).json({ blog: blogDto });
 //   },
 async update(req, res, next) {
-
-const updateBlogSchema= Joi.object({
-//   blogId: Joi.string().length(24).hex().required(),
+    const updateBlogSchema = Joi.object({
+        /*Error in given code which is solved */
+        // title: Joi.string(),
+        // author: Joi.string().regex(MongoDbPattern).required(),
+        // blogId: Joi.string().regex(MongoDbPattern).required(),
+        // photoPath: Joi.string()
+        
+        // the correct one 
+        //   blogId: Joi.string().length(24).hex().required(),
 //   author: Joi.string().length(24).hex().required(),
 //   title: Joi.string().required(),
 //   content: Joi.string().required(),  // ADD THIS LINE if missing
 //   photo: Joi.string().optional()
+// Method No 2nd
 title: Joi.string().required(),
 content: Joi.string().required(),
 author: Joi.string().regex(MongoDbPattern).required(),
 blogId: Joi.string().regex(MongoDbPattern).required(),
 photo: Joi.string(),
-});
-
+    });
 
     const { error } = updateBlogSchema.validate(req.body);
     if (error) {
@@ -192,7 +198,7 @@ photo: Joi.string(),
         );
     }
 
-    return res.status(200).json({ message: 'Blog updated' });
+    return res.status(200).json({ message: 'Blog updated',updatedBlog: blog });
 }
 ,
 
