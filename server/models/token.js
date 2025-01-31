@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const schema = new mongoose.Schema(
     {
         token: { type: String, required: true },
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' }
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     },
     { timestamps: true }
 );

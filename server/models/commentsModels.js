@@ -2,9 +2,9 @@
 import mongoose from "mongoose";
 const commentSchema  = new mongoose.Schema({
     content : {type : String, required:true},
-    blog: {type : String, required: true},
-    author : {type : mongoose.SchemaTypes.ObjectId , ref:'comments'},
+    blog: {type : mongoose.SchemaTypes.ObjectId , ref:'Blog'},
+    author : {type : mongoose.SchemaTypes.ObjectId , ref:'User'},
     timestamps : true
 })
-const commentModel= mongoose.model('comment' , commentSchema, 'comments')
+const commentModel= mongoose.model('Comment' , commentSchema, 'comments')
 export default commentModel;
