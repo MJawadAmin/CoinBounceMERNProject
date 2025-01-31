@@ -2,6 +2,7 @@ import express from "express";
 import authController from "../controller/authController.js";
 import auth from '../middleware/auth.js'
 import blogController from "../controller/blogController.js";
+import commentController from "../controller/commentController.js";
 const router = express.Router()
 //user 
 
@@ -26,7 +27,12 @@ router.get('/blog/:id', auth , blogController.getById)
 //update 
 router.put('/blog', auth , blogController.update)
 // delete 
-// router.delete('/blog/:id', auth , blogController.delete)
+ router.delete('/blog/:id', auth , blogController.delete)
+ //comment
+ //create 
+router.post('/comment', auth, commentController.create)
+ //get
+ router.get('/comment/:id',auth, commentController.getById)
 
 
 export default router;

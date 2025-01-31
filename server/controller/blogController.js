@@ -5,6 +5,7 @@ import Blog from '../models/blogModel.js';
 import BlogDTO from '../dto/blog.js';
 import BlogDetailsDTO from '../dto/blog-details.js';
 import config from '../config/index.js';
+import commentModel from '../models/commentsModels.js';
 import { title } from 'process';
 const { BACKEND_SERVER_PATH } = config;
 
@@ -202,23 +203,31 @@ photo: Joi.string(),
 }
 ,
 
-    async delete(req, res , next){
-        //Validate
-        //delete blog
-        //delete comments on this blog
-        const delteBlogSchema= Joi.object({
-            id : Joi.string().regex(MongoDbPattern).required()
-        });
-        const {error}=delteBlogSchema.validate(req.params);
-        const id = req.params;
-        //delete blog
-        //delete comments
-        try {
-            
-        } catch (error) {
-            
-        }
+async delete(req, res, next) {
+    // Validate
+    const deleteBlogSchema = Joi.object({
+        id: Joi.string().regex(MongoDbPattern).required()
+    });
+
+    const { error } = deleteBlogSchema.validate(req.params);
+    if (error) return next(error); // Stop execution if validation fails
+
+    const { id }= req.params; // Extract id correctly
+
+    try {
+        // Delete blog
+        await Blog.deleteOne({ _id: id });
+
+        // Delete comments related to the blog 
+        await commentModel.deleteMany({ blog: id });
+
+    } catch (error) {
+        return next(error);
     }
+
+    return res.status(200).json({ message: 'Blog deleted' });
+}
+
 };
 
 export default blogController;

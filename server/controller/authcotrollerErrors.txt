@@ -46,3 +46,28 @@ refresh API errors
     //     const userDto = new UserDTO(user)
     //     return res.status(200).json({user: userDto, auth : true})
     // }
+
+
+
+                               Delete controller error 
+                               async delete(req, res , next){
+        //Validate
+        //delete blog
+        //delete comments on this blog
+        const delteBlogSchema= Joi.object({
+            id : Joi.string().regex(MongoDbPattern).required()
+        });
+        const {error}=delteBlogSchema.validate(req.params);
+        const id = req.params;
+        //delete blog
+        //delete comments
+        try {
+            await Blog.deleteOne({_id: id});
+            await commentModel.deleteMany({blog: id})
+            
+        } catch (error) {
+            return next(error)
+            
+        }
+        return res.status(200).json({message:'blog deleted '})
+    }  rewrite the same just fix the error 
