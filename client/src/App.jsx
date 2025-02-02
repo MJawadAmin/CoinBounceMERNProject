@@ -3,6 +3,7 @@ import Navbar from './components/Navbar/Navbar.jsx'
 import {BrowserRouter, Routes , Route} from 'react-router-dom'
 import Footer from './components/Footer/Footer.jsx'
 import CoinBounce from './Pages/CoinBounce.jsx'
+import Protected from './components/Protected/Protected.jsx'
 
 function App() {
   

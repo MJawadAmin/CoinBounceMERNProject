@@ -36,7 +36,7 @@ const authController = {
             if (emailinUse){
                 const error={
                     status : 409,
-                    message : "Email is already registered use another email"
+                    message : "Email is already registered use another email "
                 }
                 return next(error)
             }
