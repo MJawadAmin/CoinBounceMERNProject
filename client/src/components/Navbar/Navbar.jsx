@@ -1,92 +1,92 @@
-import React from 'react'
-import { NavLink ,useLocation} from 'react-router-dom'
-import { useState } from 'react';
-
+import React, { useState } from 'react';
+// import logo from "../images/logo.svg";
+import logo from '../../../public/logo.svg'
+import { IoIosSearch } from "react-icons/io";
+import { Link } from "react-router-dom";
+import { FiAlignJustify } from "react-icons/fi";
+import { IoMdClose } from "react-icons/io";
 const Navbar = () => {
-    const [isAuthenticated, setIsAuthenticated]=useState(false)
-    const location = useLocation(); // Get the current path
-    const isActive = (path) => location.pathname === path;
+    const [isOpen, setIsOpen] = useState(false);
+    const links = [
+        { title: "Home", link: "#home" },
+        { title: "About", link: "#about" },
+        { title: "Projects", link: "#projects" },
+        { title: "Blog", link: "#blog" },
+        { title: "Contact", link: "#contact" },
+    ];
     return (
-        <div>
-        <nav className='flex flex-row justify-between w-full'>
-          {/* Left side: NavLinks */}
-          <div className='flex gap-10'>
-            <NavLink
-              to="/coinbounce"
-              className={({ isActive }) =>
-                `text-[22px] font-bold hover:text-gray-600 ${isActive ? "text-[#3861fb] underline" : ""}`
-              }
-            >
-              CoinBounce
-            </NavLink>
-            <NavLink
-              to="/"
-              className="text-[22px] font-bold hover:text-gray-600 group-[aria-current]:text-[#3861fb] group-[aria-current]:underline"
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/crypto"
-              className={({ isActive }) =>
-                `text-[22px] font-bold hover:text-gray-600 ${isActive ? "text-[#3861fb] underline" : ""}`
-              }
-            >
-              Cryptocurrencies
-            </NavLink>
-            <NavLink
-              to='/blogs'
-              className={({ isActive }) =>
-                `text-[22px] font-bold hover:text-gray-600 ${isActive ? "text-[#3861fb] underline" : ""}`
-              }
-            >
-              Blogs
-            </NavLink>
-            <NavLink
-              to='/submit'
-              className={({ isActive }) =>
-                `text-[22px] font-bold hover:text-gray-600 ${isActive ? "text-[#3861fb] underline" : ""}`
-              }
-            >
-              Submit a blog
-            </NavLink>
-          </div>
-      
-          {/* Right side: Login/Signup/Logout */}
-          <div className='flex gap-10 items-center'>
-            {isAuthenticated ? (
-              <NavLink
-                to="logout"
-                className={({ isActive }) =>
-                  `text-[22px] font-bold hover:text-gray-600 bg-red-500 rounded-2xl ${isActive ? "text-[#3861fb] underline" : ""}`
-                }
-              >
-                <button>Logout</button>
-              </NavLink>
-            ) : (
-              <>
-                <NavLink
-                  to="login"
-                  className={({ isActive }) =>
-                    `text-[22px] font-bold hover:text-gray-600 ${isActive ? "text-[#3861fb] underline" : ""}`
-                  }
-                >
-                  <button>Login</button>
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  className={({ isActive }) =>
-                    `text-[22px] font-bold hover:text-gray-600 ${isActive ? "text-[#3861fb] underline" : ""}`
-                  }
-                >
-                  <button>Signup</button>
-                </NavLink>
-              </>
-            )}
-          </div>
+        <nav className='w-full bg-[#ECF2F9] py-4 '>
+            <div className='flex justify-center gap-10'>
+                <div className='flex justify-between gap-20 items-center px-4 md:px-8'>
+                    <div className='flex items-center'>
+                        <Link to='/'>
+                            <img src={logo} alt="Logo" className='h-12' />
+                        </Link>
+                    </div>
+                    {/* Mobile Menu Button */}
+                    <div className='md:hidden'>
+                        <button onClick={() => setIsOpen(!isOpen)} className='text-[#0061E0]'>
+                            {isOpen ? <IoMdClose size={24} /> : <FiAlignJustify size={24} />}
+                        </button>
+                    </div>
+                </div>
+                {/* Desktop Navbar */}
+                <div className='hidden md:flex md:items-center md:justify-center md:px-8 lg:gap-8'>
+                    <ul className='flex gap-6 lg:gap-8 text-[#7C8893] text-sm'>
+                        {links.map((link) => (
+                            <li key={link.title} className='my-2'>
+                                <a
+                                    href={link.link}
+                                    className='text-[#7C8893] hover:text-blue-700'
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {link.title}
+                                </a>
+                            </li>
+                        ))}
+                        <li>
+                            <button className='bg-white p-3 rounded-full'>
+                                <IoIosSearch className='text-[#0061E0]' />
+                            </button>
+                        </li>
+                    </ul>
+                    <button className='py-2 px-3 bg-[#0061E0] text-white font-thin ml-4'>
+                        Get Started
+                    </button>
+                </div>
+            </div>
+            {/* Mobile Navbar */}
+            <div className={`fixed inset-0 bg-[#F4F9FF] shadow-lg z-50 md:hidden transition-transform transform ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+                <div className='flex justify-end p-4'>
+                    <button onClick={() => setIsOpen(false)} className='text-[#0061E0]'>
+                        <IoMdClose size={24} />
+                    </button>
+                </div>
+                <ul className='flex flex-col items-center mt-16'>
+                    {links.map((link) => (
+                        <li key={link.title} className='my-4 w-full text-center text-xl border-b p-2 border-[#0061E0]'>
+                            <a
+                                href={link.link}
+                                className='text-[#7C8893] hover:text-blue-700'
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {link.title}
+                            </a>
+                        </li>
+                    ))}
+                    <li className='my-4'>
+                        <button className='bg-white p-3 rounded-full'>
+                            <IoIosSearch className='text-[#0061E0]' />
+                        </button>
+                    </li>
+                    <li className='mt-4'>
+                        <button className='py-2 px-4 bg-[#0061E0] text-white font-thin'>
+                            Get Started
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </nav>
-      </div>
-      
-    )
+    );
 }
-
-export default Navbar
+export default Navbar;
