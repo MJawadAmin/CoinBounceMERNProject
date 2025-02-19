@@ -1,40 +1,78 @@
+import Navbar from './components/Navbar/Navbar'
+import { BrowserRouter, Routes , Route } from 'react-router-dom'
+import Footer from './components/Footer/Footer'
 import './index.css'
-import Navbar from './components/Navbar/Navbar.jsx'
-import {BrowserRouter, Routes , Route} from 'react-router-dom'
-import Footer from './components/Footer/Footer.jsx'
-import CoinBounce from './Pages/CoinBounce.jsx'
-import Login from './components/loging.jsx'
-import Signup from './components/Signup.jsx'
-import Protected from './components/Protected/Protected.jsx'
+import Home from './components/pages/Home'
+import CoinBounce from './components/pages/CoinBounce'
+import Crypto from './components/pages/Crypto'
+import Blogs from './components/pages/Blogs'
+import SubmitBlog from './components/pages/SubmitBlog'
+import Login from './components/pages/Login'
+import Logout from './components/pages/Logout'
+import Signup from './components/pages/Signup'
+import Protected from './components/protected/Protected'
+import Error from './components/pages/Error'
+
+
 
 function App() {
   
-
+const isAuth=false;
   return (
-    <div> 
-      <Navbar />
-     <BrowserRouter>
-     <Navbar />
-
-     <Routes>
-      {/* <Route path="/" element={<Home />} /> */}
-      {/* <Route path="dashboard" element={}>
-        {/* <Route index element={<RecentActivity />} /> */}
-      {/* </Route> */}
-      {/* <Route path="footer" element={} />  */}
-      <Route path='coinbounce' exact element={<CoinBounce/>} />
-      <Route path='/' exact element={<div className='text-9xl text-center h-[100vh] w-full bg-blue-400 mt-8'> Coin Bounce Home page </div>} />
-      <Route path='crypto' exact element={<div className='text-9xl text-center h-[100vh] w-full bg-blue-400 mt-8'> Coin Bounce crypto page </div>} />
-      <Route path='blogs' exact element={<div className='text-9xl text-center h-[100vh] w-full bg-blue-400 mt-8'> Coin Bounce  blogs page </div>} />
-      <Route path='submit' exact element={<div className='text-9xl text-center h-[100vh] w-full bg-blue-400 mt-8'> Coin Bounce  submit page </div>} />
-      <Route path="/login" element={<Login />}/>
-      <Route path="/signup" element={<Signup />} />
-   </Routes> 
-  
-  
-    <Footer />
-    
-  </BrowserRouter>
+    <div className='mt-5'> 
+    <BrowserRouter>
+    <Navbar/>
+    <Routes>
+     
+      <Route
+      path='/coinbounce'
+      exact
+      element={<div className='flex-1'> <CoinBounce/></div>}
+      />
+       <Route
+      path='/'
+      exact
+      element={ <Home/>}
+      />
+      <Route
+      path='/crypto'
+      exact
+      element={<Crypto/>}
+      />
+       <Route
+      path='/blogs'
+      exact
+      element={<Protected isAuth={isAuth}><Blogs/></Protected>}
+      />
+       <Route
+      path='/submit'
+      exact
+      element={ <Protected isAuth={isAuth}> <SubmitBlog/>
+      </Protected>}
+      />
+       <Route
+      path='/login'
+      exact
+      element={ <Login/>}
+      />
+       <Route
+      path='/logout'
+      exact
+      element={ <Logout/>}
+      />
+      <Route
+      path='/signup'
+      exact
+      element={ <Signup/>}
+      />
+      <Route
+      path='*'
+      exact
+      element={<Error/>}
+      />
+    </Routes>
+    <Footer/>
+    </BrowserRouter>
   
     </div>
   )
