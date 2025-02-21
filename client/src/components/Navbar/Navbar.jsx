@@ -1,8 +1,9 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-    const isAthenticated= false;
+    const isAthenticated= useSelector(state=>state.user.auth);
   return (
     <div>
       <nav className='w-[80%]  flex justify-between items-center text-center mx-auto '>

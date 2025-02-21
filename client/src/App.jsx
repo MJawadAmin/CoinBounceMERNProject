@@ -7,17 +7,23 @@ import CoinBounce from './components/pages/CoinBounce'
 import Crypto from './components/pages/Crypto'
 import Blogs from './components/pages/Blogs'
 import SubmitBlog from './components/pages/SubmitBlog'
-import Login from './components/pages/Login'
+import Login from './components/pages/login/Login'
 import Logout from './components/pages/Logout'
 import Signup from './components/pages/Signup'
 import Protected from './components/protected/Protected'
 import Error from './components/pages/Error'
+import store from './store/index'
+import { useSelector } from 'react-redux'
 
 
 
 function App() {
   
-const isAuth=false;
+
+  console.log("Redux Store:", store); 
+console.log("Redux State:", store.getState()); 
+
+const isAuth=useSelector((state)=>state.user.auth);
   return (
     <div className='mt-5'> 
     <BrowserRouter>

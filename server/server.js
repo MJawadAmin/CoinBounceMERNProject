@@ -4,9 +4,15 @@ import config from './config/index.js';
 import router from "./routes/index.js";
 import errorHandler from "./middleware/erroHandler.js";
 import cookieParser from "cookie-parser";
+import cors from 'cors'
+const corsOption={
+    credentials:true,
+    origin:["http://localhost:5173"],
+};
 const { PORT } = config;
 const app = express()
 app.use(cookieParser())
+app.use(cors(corsOption))
 app.use(express.json());
 app.use(router);
 
